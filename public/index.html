@@ -940,4 +940,834 @@
 </script>
 
 </body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduManage Pro | Backend System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #1a2530;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a3a, #2c3e50);
+            color: white;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .logo i {
+            font-size: 3rem;
+            color: var(--secondary);
+        }
+
+        .logo-text {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .logo-text span {
+            color: var(--secondary);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: #bbb;
+            margin-bottom: 1.5rem;
+        }
+
+        .api-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(46, 204, 113, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            border: 1px solid rgba(46, 204, 113, 0.5);
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .backend-structure {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .endpoint-list {
+            list-style: none;
+        }
+
+        .endpoint-item {
+            padding: 0.8rem;
+            margin-bottom: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .endpoint-method {
+            padding: 0.3rem 0.8rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .method-get {
+            background: rgba(52, 152, 219, 0.2);
+            color: var(--secondary);
+            border: 1px solid rgba(52, 152, 219, 0.5);
+        }
+
+        .method-post {
+            background: rgba(46, 204, 113, 0.2);
+            color: var(--success);
+            border: 1px solid rgba(46, 204, 113, 0.5);
+        }
+
+        .method-put {
+            background: rgba(243, 156, 18, 0.2);
+            color: var(--warning);
+            border: 1px solid rgba(243, 156, 18, 0.5);
+        }
+
+        .method-delete {
+            background: rgba(231, 76, 60, 0.2);
+            color: var(--danger);
+            border: 1px solid rgba(231, 76, 60, 0.5);
+        }
+
+        .endpoint-path {
+            font-family: monospace;
+            color: #ddd;
+        }
+
+        .database-schema {
+            margin-top: 3rem;
+        }
+
+        .schema-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .schema-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .schema-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .field-list {
+            list-style: none;
+        }
+
+        .field-item {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .field-name {
+            font-family: monospace;
+            color: #ddd;
+        }
+
+        .field-type {
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+
+        .tech-stack {
+            margin-top: 3rem;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .tech-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tech-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .tech-name {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-desc {
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+
+        .deployment {
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .deployment-cards {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .deploy-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            width: 200px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .deploy-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--success);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--secondary);
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 2rem 0;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bbb;
+        }
+
+        @media (max-width: 768px) {
+            .backend-structure {
+                grid-template-columns: 1fr;
+            }
+            
+            .schema-grid, .tech-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .deployment-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-server"></i>
+                <div class="logo-text">EduManage<span>Pro</span> Backend</div>
+            </div>
+            <p class="tagline">Robust, Scalable, and Secure Backend Infrastructure</p>
+            <div class="api-status">
+                <div class="status-dot"></div>
+                <span>API Server Running on port 3000</span>
+            </div>
+        </header>
+
+        <section class="backend-structure">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="card-title">Student Management</h3>
+                </div>
+                <ul class="endpoint-list">
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/students</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-post">POST</span>
+                        <span class="endpoint-path">/api/students</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/students/:id</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-put">PUT</span>
+                        <span class="endpoint-path">/api/students/:id</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-delete">DELETE</span>
+                        <span class="endpoint-path">/api/students/:id</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/students/:id/grades</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/students/:id/attendance</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h3 class="card-title">Faculty Management</h3>
+                </div>
+                <ul class="endpoint-list">
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/faculty</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-post">POST</span>
+                        <span class="endpoint-path">/api/faculty</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/faculty/:id</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-put">PUT</span>
+                        <span class="endpoint-path">/api/faculty/:id</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/faculty/:id/courses</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/faculty/:id/schedule</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3 class="card-title">Course Management</h3>
+                </div>
+                <ul class="endpoint-list">
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/courses</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-post">POST</span>
+                        <span class="endpoint-path">/api/courses</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/courses/:id</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-put">PUT</span>
+                        <span class="endpoint-path">/api/courses/:id</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/courses/:id/students</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/courses/:id/grades</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <h3 class="card-title">Attendance & Grades</h3>
+                </div>
+                <ul class="endpoint-list">
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-post">POST</span>
+                        <span class="endpoint-path">/api/attendance</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/attendance/course/:id</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-post">POST</span>
+                        <span class="endpoint-path">/api/grades</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/grades/student/:id</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/grades/course/:id</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-put">PUT</span>
+                        <span class="endpoint-path">/api/grades/:id</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                    <h3 class="card-title">Financial Management</h3>
+                </div>
+                <ul class="endpoint-list">
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/fees</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-post">POST</span>
+                        <span class="endpoint-path">/api/fees</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/fees/student/:id</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-post">POST</span>
+                        <span class="endpoint-path">/api/payments</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/payments/student/:id</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/financial-reports</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <h3 class="card-title">System & Authentication</h3>
+                </div>
+                <ul class="endpoint-list">
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-post">POST</span>
+                        <span class="endpoint-path">/api/auth/login</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-post">POST</span>
+                        <span class="endpoint-path">/api/auth/register</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-post">POST</span>
+                        <span class="endpoint-path">/api/auth/refresh</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/users/me</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-put">PUT</span>
+                        <span class="endpoint-path">/api/users/me</span>
+                    </li>
+                    <li class="endpoint-item">
+                        <span class="endpoint-method method-get">GET</span>
+                        <span class="endpoint-path">/api/system/health</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <section class="database-schema">
+            <h2 class="section-title">Database Schema</h2>
+            <div class="schema-grid">
+                <div class="schema-card">
+                    <h3 class="schema-title"><i class="fas fa-table"></i> Students</h3>
+                    <ul class="field-list">
+                        <li class="field-item">
+                            <span class="field-name">id</span>
+                            <span class="field-type">UUID (Primary Key)</span>
+                        </li>
+                        <li class="field-item">
+                            <span class="field-name">student_id</span>
+                            <span class="field-type">VARCHAR(20)</span>
+                        </li>
+                        <li class="field-item">
+                            <span class="field-name">first_name</span>
+                            <span class="field-type">VARCHAR(50)</span>
+                        </li>
+                        <li class="field-item">
+                            <span class="field-name">last_name</span>
+                            <span class="field-type">VARCHAR(50)</span>
+                        </li>
+                        <li class="field-item">
+                            <span class="field-name">email</span>
+                            <span class="field-type">VARCHAR(100)</span>
+                        </li>
+                        <li class="field-item">
+                            <span class="field-name">phone</span>
+                            <span class="field-type">VARCHAR(15)</span>
+                        </li>
+                        <li class="field-item">
+                            <span class="field-name">program</span>
+                            <span class="field-type">VARCHAR(100)</span>
+                        </li>
+                        <li class="field-item">
+                            <span class="field-name">year</span>
+                            <span class="field-type">INTEGER</span>
+                        </li>
+                        <li class="field-item">
+                            <span class="field-name">created_at</span>
+                            <span class="field-type">TIMESTAMP</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="schema-card">
+                    <h3 class="schema-title"><i class="fas fa-table"></i> Courses</h3>
+                    <ul class="field-list">
+                        <li class="field-item">
+                            <span class="field-name">id</span>
+                            <span class="field-type">UUID (Primary Key)</span>
+                        </li>
+                        <li class="field-item">
+                            <span class="field-name">course_code</span>
+                            <span class="field-type">VARCHAR(20)</span>
+                        </li>
+                        <li class="field-item">
+                            <span class="field-name">title</span>
+                            <span class="field-type">VARCHAR(100)</span>
+                        </li>
+                        <li class="field-item">
+                            <span class="field-name">description</span>
+                            <span class="field-type">TEXT</span>
+                        </li>
+                        <li class="field-item">
+                            <span class="field-name">credits</span>
+                            <span class="field-type">INTEGER</span>
+                        </li>
+                        <li class="field-item">
+                            <span class="field-name">department</span>
+                            <span class="field-type">VARCHAR(100)</span>
+                        </li>
+                        <li class="field-item">
+                            <span class="field-name">faculty_id</span>
+                            <span class="field-type">UUID (Foreign Key)</span>
+                        </li>
+                        <li class="field-item">
+                            <span class="field-name">semester</span>
+                            <span class="field-type">VARCHAR(20)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="schema-card">
+                    <h3 class="schema-title"><i class="fas fa-table"></i> Grades</h3>
+                    <ul class="field-list">
+                        <li class="field-item">
+                            <span class="field-name">id</span>
+                            <span class="field-type">UUID (Primary Key)</span>
+                        </li>
+                        <li class="field-item">
+                            <span class="field-name">student_id</span>
+                            <span class="field-type">UUID (Foreign Key)</span>
+                        </li>
+                        <li class="field-item">
+                            <span class="field-name">course_id</span>
+                            <span class="field-type">UUID (Foreign Key)</span>
+                        </li>
+                        <li class="field-item">
+                            <span class="field-name">grade</span>
+                            <span class="field-type">VARCHAR(2)</span>
+                        </li>
+                        <li class="field-item">
+                            <span class="field-name">score</span>
+                            <span class="field-type">DECIMAL(5,2)</span>
+                        </li>
+                        <li class="field-item">
+                            <span class="field-name">semester</span>
+                            <span class="field-type">VARCHAR(20)</span>
+                        </li>
+                        <li class="field-item">
+                            <span class="field-name">academic_year</span>
+                            <span class="field-type">VARCHAR(10)</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <section class="tech-stack">
+            <h2 class="section-title">Technology Stack</h2>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fab fa-node-js"></i>
+                    </div>
+                    <h3 class="tech-name">Node.js</h3>
+                    <p class="tech-desc">Runtime environment for server-side JavaScript</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3 class="tech-name">PostgreSQL</h3>
+                    <p class="tech-desc">Relational database for structured data</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <h3 class="tech-name">JWT</h3>
+                    <p class="tech-desc">Secure token-based authentication</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="tech-name">Helmet.js</h3>
+                    <p class="tech-desc">Security middleware for Express</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h3 class="tech-name">PM2</h3>
+                    <p class="tech-desc">Production process manager</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <h3 class="tech-name">AWS/DigitalOcean</h3>
+                    <p class="tech-desc">Cloud deployment platforms</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <section class="deployment">
+            <h2 class="section-title">Deployment & Infrastructure</h2>
+            <div class="deployment-cards">
+                <div class="deploy-card">
+                    <div class="deploy-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3>Load Balancing</h3>
+                    <p>Nginx reverse proxy with multiple node instances</p>
+                </div>
+                <div class="deploy-card">
+                    <div class="deploy-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>Database Cluster</h3>
+                    <p>PostgreSQL with read replicas and failover</p>
+                </div>
+                <div class="deploy-card">
+                    <div class="deploy-icon">
+                        <i class="fas fa-backward"></i>
+                    </div>
+                    <h3>Backup Strategy</h3>
+                    <p>Automated daily backups with point-in-time recovery</p>
+                </div>
+                <div class="deploy-card">
+                    <div class="deploy-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Security</h3>
+                    <p>SSL encryption, rate limiting, and API key authentication</p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>EduManage Pro Backend System &copy; 2023 | Designed with 30+ years of development experience</p>
+        </footer>
+    </div>
+
+    <script>
+        // Simulate API status check
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusElement = document.querySelector('.api-status');
+            const statusDot = document.querySelector('.status-dot');
+            
+            // Simulate API health check
+            setInterval(() => {
+                fetch('/api/system/health')
+                    .then(response => {
+                        if (response.ok) {
+                            statusDot.style.background = '#2ecc71';
+                            statusElement.querySelector('span').textContent = 'API Server Running on port 3000';
+                        } else {
+                            statusDot.style.background = '#e74c3c';
+                            statusElement.querySelector('span').textContent = 'API Server Issues Detected';
+                        }
+                    })
+                    .catch(() => {
+                        statusDot.style.background = '#e74c3c';
+                        statusElement.querySelector('span').textContent = 'API Server Unreachable';
+                    });
+            }, 5000);
+            
+            // Add hover effects to cards
+            const cards = document.querySelectorAll('.card, .schema-card, .tech-card, .deploy-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.2)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+        });
+    </script>
+</body>
 </html>
